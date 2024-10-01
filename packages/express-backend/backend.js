@@ -33,10 +33,29 @@ const users = {
         job: "Bartender"
       }
     ]
-  };
+};
 
-app.get("/", (req, res) => {
-    res.send(users);
+const findUserByName = (name) => {
+    return users["users_list"].filter(
+      (user) => user["name"] === name
+    );
+};
+
+const findUserByJob = (job) => {
+    return users["users_list"].filter(
+        (user) => user["job"] === job
+    );
+};
+
+app.get("/users", (req, res) => {
+    const job = req.query.job;
+    if (job != undefined) {
+        let result = findUserByJob(job);
+        result = { users_list: result };
+        res.send(result);
+    } else {
+        res.send(users);
+    }
 });
 
 app.listen(port, () => {
