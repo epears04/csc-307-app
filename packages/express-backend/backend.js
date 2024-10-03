@@ -50,6 +50,30 @@ const findUserByJob = (job) => {
 const findUserById = (id) =>
     users["users_list"].find((user) => user["id"] === id);
 
+const addUser = (user) => {
+    users["users_list"].push(user);
+    return user;
+};
+
+app.post("/users", (req, res) => {
+    const userToAdd = req.body;
+    addUser(userToAdd);
+    res.send();
+});
+
+const deleteUser = (id) => {
+  const indexToDelete = users["users_list"].findIndex(user => user.id === id);
+  if (indexToDelete !== -1) {
+    users["users_list"].splice(indexToDelete, 1);
+  }
+}
+
+//given id deletes user associated with id
+app.delete("/users/:id", (req, res) => {
+  const id = req.params.id;
+  deleteUser(id);
+  res.send()
+});
 
 app.get("/users/:id", (req, res) => {
     const id = req.params.id;
