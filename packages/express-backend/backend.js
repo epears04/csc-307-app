@@ -65,8 +65,18 @@ const addUser = (user) => {
 
 app.post("/users", (req, res) => {
     const userToAdd = req.body;
-    addUser(userToAdd);
-    res.send();
+    const success = addUser(userToAdd);
+    if(success) {
+      res.status(201).send({
+        message: "User created successfully",
+        user: userToAdd
+      });
+    }
+    else {
+      res.status(500).send({
+        message: "Failed to add user"
+      });
+    }
 });
 
 const deleteUser = (id) => {

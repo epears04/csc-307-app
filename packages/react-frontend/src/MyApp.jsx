@@ -15,7 +15,14 @@ function MyApp() {
 
 	function updateList(person) {
 		postUser(person)
-			.then(() => setCharacters([...characters, person]))
+			.then((response) => {
+				if(response.status === 201) {
+					return response.json();
+				} else {
+					throw new Error('Failed to create user');
+				}
+			})
+			.then((data) => setCharacters([...characters, data.user]))
 			.catch((error) => {
 				console.log(error);
 			})
