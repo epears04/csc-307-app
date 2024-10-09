@@ -63,7 +63,7 @@ const addUser = (user) => {
     return user;
 };
 
-const getNewID = (user) => {
+const getNewID = () => {
   return Math.floor(Math.random() * 1000001).toString();
 }
 
@@ -71,7 +71,7 @@ app.post("/users", (req, res) => {
     const userToAdd = req.body;
     const success = addUser(userToAdd);
     if(success) {
-      userToAdd.id = getNewID(userToAdd);
+      userToAdd.id = getNewID();
       res.status(201).send({
         message: "User created successfully",
         user: userToAdd
