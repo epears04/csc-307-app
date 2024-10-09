@@ -63,9 +63,16 @@ const addUser = (user) => {
     return user;
 };
 
+const getNewID = (user) => {
+  const newID = Math.floor(Math.random() * 1000001);
+  const userIndex = users["users_list"].indexOf(user);
+  users["users_list"][userIndex].id = newID.toString();
+}
+
 app.post("/users", (req, res) => {
     const userToAdd = req.body;
     const success = addUser(userToAdd);
+    getNewID(userToAdd);
     if(success) {
       res.status(201).send({
         message: "User created successfully",
