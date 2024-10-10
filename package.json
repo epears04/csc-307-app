@@ -4,7 +4,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "npm run dev --workspace=react-frontend"
+    "dev": "npm run dev --workspace=react-frontend",
+    "backend": "npm -w express-backend run dev"
   },
   "author": "",
   "license": "ISC",
