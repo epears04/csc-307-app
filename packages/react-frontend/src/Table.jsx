@@ -1,4 +1,3 @@
-// src/Table.jsx
 import React from "react";
 
 function TableHeader() {
@@ -44,7 +43,6 @@ function Table(props) {
         <TableHeader />
         <TableBody
           characterData={props.characterData}
-
           removeCharacter={props.removeCharacter}
         />
       </table>
