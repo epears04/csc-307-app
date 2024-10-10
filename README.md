@@ -3,5 +3,4 @@ Professor Zielke
 Sep. 24, 2024
 <br>
 - run frontend with "npm run dev" in root file
-<br>
 - run backend with "npm run backend" in root file
