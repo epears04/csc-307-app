@@ -87,14 +87,23 @@ const deleteUser = (id) => {
   const indexToDelete = users["users_list"].findIndex(user => user.id === id);
   if (indexToDelete !== -1) {
     users["users_list"].splice(indexToDelete, 1);
+    return indexToDelete;
   }
+  return -1;
 }
 
 //given id deletes user associated with id
 app.delete("/users/:id", (req, res) => {
   const id = req.params.id;
-  deleteUser(id);
-  res.send()
+  const userIndex = deleteUser(id);
+  if (userIndex >= 0) {
+    res.status(200).send({
+      message: "User successfully deleted",
+      index: userIndex
+    });
+  } else {
+    res.status(404).send({message: "User not found."});
+  }
 });
 
 app.get("/users/:id", (req, res) => {
