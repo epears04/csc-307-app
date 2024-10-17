@@ -32,7 +32,7 @@ function getUsers(name, job) {
     } else if (job && !name) {
       promise = findUserByJob(job);
     } else { //name and user provided
-			promise = User.find({ name, job });
+			promise = findUserByNameAndJob(name, job);
     }
     return promise; 
   }
@@ -40,11 +40,19 @@ function getUsers(name, job) {
   function findUserById(id) {
     return User.findById(id);
   }
+
+  function findByIdAndDelete(id) {
+    return User.findByIdAndDelete(id);
+  }
   
   function addUser(user) {
     const userToAdd = new User(user);
     const promise = userToAdd.save();
     return promise;
+  }
+
+  function findUserByNameAndJob(name, job) {
+    return User.find({ name: name, job: job});
   }
   
   function findUserByName(name) {
@@ -59,6 +67,7 @@ function getUsers(name, job) {
     addUser,
     getUsers,
     findUserById,
+    findByIdAndDelete,
     findUserByName,
     findUserByJob,
   };
