@@ -20,30 +20,26 @@ app.use(express.json());
 const findUserById = (id) =>
     users["users_list"].find((user) => user["id"] === id);
 
-const addUser = (user) => {
-    users["users_list"].push(user);
-    return user;
-};
-
-const getNewID = () => {
-  return Math.floor(Math.random() * 1000001).toString();
-}
 
 app.post("/users", (req, res) => {
     const userToAdd = req.body;
-    const success = addUser(userToAdd);
-    if(success) {
-      userToAdd.id = getNewID();
-      res.status(201).send({
-        message: "User created successfully",
-        user: userToAdd
-      });
-    } else {
-      res.status(500).send({
-        message: "Failed to add user"
-      });
-    }
-});
+
+    userModel.addUser(userToAdd)
+      .then((newUser) => {
+        if(!newUser) {
+          res.status(500).send("Failed to add user.");
+        } else {
+          res.status(201).send({
+            message: "User created successfully",
+            user: newUser,
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        res.status(500).send("Could not add user.");
+      })
+  });
 
 const deleteUser = (id) => {
   const indexToDelete = users["users_list"].findIndex(user => user.id === id);
@@ -94,35 +90,7 @@ app.get("/users", (req, res) => {
         console.log(error);
         res.status(500).send("Could not get users");
       })
-    });
-    /*
-    if (job !== undefined && name !== undefined) {
-      let result = findUserByNameAndJob(name, job);
-      if (result.length === 0) {
-        res.status(404).send("Resource not found.")
-      } else {
-        result = { users_list: result };
-        res.send(result);
-      }
-    } else if (job !== undefined) {
-        let result = findUserByJob(job);
-        if (result.length === 0) {
-          res.status(404).send("Resource not found.")
-        } else {
-          result = { users_list: result };
-          res.send(result);
-        }
-    } else if (name !== undefined) {
-        let result = findUserByName(name);
-        if (result.length === 0) {
-          res.status(404).send("Resource not found.")
-        } else {
-          result = { users_list: result };
-          res.send(result);
-        }
-    } else {
-        res.send(users);
-    }*/
+});
 
 app.listen(port, () => {
     console.log(
