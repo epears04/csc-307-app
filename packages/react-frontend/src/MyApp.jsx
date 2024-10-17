@@ -6,7 +6,7 @@ function MyApp() {
 	const [characters, setCharacters] = useState([]);
 
 	function removeOneCharacter(index) {
-		const charID = characters[index].id;
+		const charID = characters[index]._id;
 		deleteUser(charID)
 			.then((response) => {
 				if(response.status === 200) {

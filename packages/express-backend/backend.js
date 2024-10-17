@@ -53,15 +53,21 @@ const deleteUser = (id) => {
 //given id deletes user associated with id
 app.delete("/users/:id", (req, res) => {
   const id = req.params.id;
-  const userIndex = deleteUser(id);
-  if (userIndex >= 0) {
-    res.status(200).send({
-      message: "User successfully deleted",
-      index: userIndex
-    });
-  } else {
-    res.status(404).send({message: "User not found."});
-  }
+  userModel.findByIdAndDelete(id)
+    .then((user) => {
+      if(!user) {
+        res.status(404).send("No user found with that id");
+      } else {
+        res.status(200).send({
+          message: "User successfully deleted",
+          index: user._id
+        });
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(500).send("Could not delete user");
+    })
 });
 
 app.get("/users/:id", (req, res) => {
