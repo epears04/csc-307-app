@@ -17,10 +17,6 @@ const port = 8000;
 app.use(cors());
 app.use(express.json());
 
-const findUserById = (id) =>
-    users["users_list"].find((user) => user["id"] === id);
-
-
 app.post("/users", (req, res) => {
     const userToAdd = req.body;
 
@@ -72,12 +68,18 @@ app.delete("/users/:id", (req, res) => {
 
 app.get("/users/:id", (req, res) => {
     const id = req.params.id;
-    let result = findUserById(id);
-    if (result === undefined) {
-        res.status(404).send("Resource not found.");
-    } else {
-        res.send(result);
-    }
+    userModel.findUserById(id)
+      .then((user) => {
+        if(!user) {
+          res.status(404).send("No user found.");
+        } else {
+          res.send({ users_list: user });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        res.status(500).send("Could not get users");
+      })
 });
 
 app.get("/users", (req, res) => {
