@@ -22,4 +22,43 @@ const UserSchema = new mongoose.Schema(
 );
 
 const User = mongoose.model("User", UserSchema);
-export default User;
+
+function getUsers(name, job) {
+    let promise;
+    if (name === undefined && job === undefined) {
+      promise = User.find();
+    } else if (name && !job) {
+      promise = findUserByName(name);
+    } else if (job && !name) {
+      promise = findUserByJob(job);
+    } else { //name and user provided
+			promise = User.find({ name, job });
+    }
+    return promise; 
+  }
+  
+  function findUserById(id) {
+    return User.findById(id);
+  }
+  
+  function addUser(user) {
+    const userToAdd = new User(user);
+    const promise = userToAdd.save();
+    return promise;
+  }
+  
+  function findUserByName(name) {
+    return User.find({ name: name });
+  }
+  
+  function findUserByJob(job) {
+    return User.find({ job: job });
+  }
+  
+  export default {
+    addUser,
+    getUsers,
+    findUserById,
+    findUserByName,
+    findUserByJob,
+  };

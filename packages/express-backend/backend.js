@@ -1,5 +1,15 @@
 import express from "express";
 import cors from "cors";
+import mongoose from "mongoose";
+import userModel from "./user.js";
+
+mongoose.set("debug", true);
+
+mongoose.connect("mongodb://localhost:27017/users", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.catch((error) => console.log(error));
 
 const app = express();
 const port = 8000;
@@ -117,9 +127,23 @@ app.get("/users/:id", (req, res) => {
 });
 
 app.get("/users", (req, res) => {
-    const job = req.query.job;
     const name = req.query.name;
+    const job = req.query.job;
 
+    userModel.getUsers(name, job)
+      .then((users) => {
+        if(users.length === 0) {
+          res.status(404).send("No user found.");
+        } else {
+          res.send({ users_list: users });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        res.status(500).send("Could not get users");
+      })
+    });
+    /*
     if (job !== undefined && name !== undefined) {
       let result = findUserByNameAndJob(name, job);
       if (result.length === 0) {
@@ -146,11 +170,10 @@ app.get("/users", (req, res) => {
         }
     } else {
         res.send(users);
-    }
-});
+    }*/
 
 app.listen(port, () => {
     console.log(
-      `Example app listening at http://localhost:${port}`
+      `Example app listening at http://localhost:${port}/users`
     );
 });
